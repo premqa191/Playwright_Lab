@@ -1,26 +1,37 @@
-# valid_anagram.py - Turing Screening Task (Frequency Counter O(N))
-
 def is_anagram(s: str, t: str) -> bool:
-    # బేస్ కండిషన్: పొడవు వేరుగా ఉంటే అనగ్రామ్ అయ్యే అవకాశమే లేదు
+    """
+    Time Complexity: O(N) - స్ట్రింగ్ పొడవు ఆధారంగా లీనియర్ సమయంలో పూర్తవుతుంది.
+    Space Complexity: O(1) - ఇంగ్లీష్ ఆల్ఫాబెట్స్ (గరిష్టంగా 26 అక్షరాలు) మాత్రమే ఉంటాయి కాబట్టి స్థిరమైన మెమరీ.
+    """
+    # బౌండరీ కేస్: పొడవులు భిన్నంగా ఉంటే వెంటనే నిష్క్రమిస్తుంది
     if len(s) != len(t):
         return False
 
     char_counts = {}
 
-    # మొదటి పదం 's' లోని అక్షరాల ఫ్రీక్వెన్సీని లెక్కించడం
+    # స్ట్రింగ్ 's' లోని అక్షరాల ఫ్రీక్వెన్సీని లెక్కించడం
     for char in s:
         char_counts[char] = char_counts.get(char, 0) + 1
 
-    # రెండవ పదం 't' లోని అక్షరాలను సరిపోల్చడం
+    # స్ట్రింగ్ 't' ద్వారా ఫ్రీక్వెన్సీని ధృవీకరించడం
     for char in t:
-        # అక్షరం డిక్షనరీలో లేకపోయినా లేదా కౌంట్ సున్నా అయిపోయినా మ్యాచ్ కాదు
         if char not in char_counts or char_counts[char] == 0:
             return False
         char_counts[char] -= 1
 
     return True
 
-# టెస్ట్ వెరిఫికేషన్
-print("Case 1 ('anagram', 'nagaram'):", is_anagram("anagram", "nagaram"))
-print("Case 2 ('rat', 'car'):", is_anagram("rat", "car"))
-print("Case 3 ('listen', 'silent'):", is_anagram("listen", "silent"))
+if __name__ == "__main__":
+    # టెస్ట్ కేస్ 1: వాలిడ్ అనగ్రామ్
+    assert is_anagram("anagram", "nagaram") is True, "Test case 1 failed"
+
+    # టెస్ట్ కేస్ 2: ఇన్వాలిడ్ అనగ్రామ్
+    assert is_anagram("rat", "car") is False, "Test case 2 failed"
+
+    # టెస్ట్ కేస్ 3: వేర్వేరు పొడవులు ఉన్న కేస్
+    assert is_anagram("a", "ab") is False, "Test case 3 failed"
+
+    # టెస్ట్ కేస్ 4: పునరావృత అక్షరాలు తప్పుగా ఉన్న కేస్
+    assert is_anagram("aa", "a") is False, "Test case 4 failed"
+
+    print("All Valid Anagram assertions passed successfully with O(N) time complexity!")
