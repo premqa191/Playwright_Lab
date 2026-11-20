@@ -1,0 +1,35 @@
+import heapq
+
+def find_kth_largest(nums: list[int], k: int) -> int:
+    """
+    Time Complexity: O(N log K) - ప్రతి మూలకాన్ని సైజు K ఉన్న హీప్‌లో ఇన్సర్ట్ చేయడానికి log K సమయం పడుతుంది.
+    Space Complexity: O(K) - హీప్ పరిమాణం ఎల్లప్పుడూ K కి మాత్రమే పరిమితం చేయబడుతుంది.
+    """
+    min_heap = []
+
+    for num in nums:
+        heapq.heappush(min_heap, num)
+        # హీప్ పరిమాణం k దాటితే కనిష్ట మూలకాన్ని తొలగించడం
+        if len(min_heap) > k:
+            heapq.heappop(min_heap)
+
+    # హీప్‌లో మిగిలిన k మూలకాలలో టాప్ ఎలిమెంటే k-వ గరిష్ట విలువ
+    return min_heap[0]
+
+if __name__ == "__main__":
+    # టెస్ట్ కేస్ 1: ప్రామాణిక జాబితా
+    assert find_kth_largest([3, 2, 1, 5, 6, 4], 2) == 5, "Test case 1 failed"
+
+    # టెస్ట్ కేస్ 2: పునరావృత విలువలతో కూడిన జాబితా
+    assert find_kth_largest([3, 2, 3, 1, 2, 4, 5, 5, 6], 4) == 4, "Test case 2 failed"
+
+    # టెస్ట్ కేస్ 3: కేవలం ఒకే మూలకం ఉన్నప్పుడు
+    assert find_kth_largest([1], 1) == 1, "Test case 3 failed"
+
+    # టెస్ట్ కేస్ 4: రుణ సంఖ్యలు ఉన్నప్పుడు
+    assert find_kth_largest([-1, -2, -3, -4], 2) == -2, "Test case 4 failed"
+
+    # టెస్ట్ కేస్ 5: k అనేది జాబితా పొడవుకు సమానమైనప్పుడు (అత్యల్ప సంఖ్య అవుతుంది)
+    assert find_kth_largest([7, 10, 4, 3, 20, 15], 6) == 3, "Test case 5 failed"
+
+    print("All Kth Largest Element in an Array assertions passed successfully with O(N log K) Heap!")
