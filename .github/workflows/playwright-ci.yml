@@ -1,0 +1,25 @@
+﻿name: Playwright Hybrid & Parallel Docker CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test-in-docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Run Parallel & Hybrid Tests in Docker
+        run: docker compose run --rm --build playwright-runner pytest test_parallel_auth.py test_hybrid_session.py -n 2 -v --html=reports/ci_report.html --self-contained-html
+
+      - name: Upload Reports & Auth State Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-ci-reports
+          path: reports/

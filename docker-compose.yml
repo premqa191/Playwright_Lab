@@ -1,0 +1,7 @@
+services:
+  playwright-runner:
+    build: .
+    image: my-playwright-automation
+    volumes:
+      - .:/app
+    command: pytest test_trace.py -v
