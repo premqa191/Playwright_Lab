@@ -1,0 +1,31 @@
+﻿name: Playwright Parallel CI & Report Artifacts
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  playwright-parallel-suite:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Run Playwright Suite in Parallel (-n 2)
+        run: >
+          docker compose run --rm -e PYTHONPATH=/app playwright-runner
+          pytest tests/test_hybrid_seed_cleanup.py
+          tests/test_api_validation_and_edge_cases.py
+          tests/test_trace_demo.py
+          tests/test_network_mocking.py
+          -n 2 -v --html=reports/ci_report.html --self-contained-html
+
+      - name: Upload Test Report & Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-parallel-report
+          path: reports/
